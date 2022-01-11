@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useAllUsers } from './hooks/useAllUsers'
 import './App.css';
+import { UserCard } from './components/UserCard';
 
 function App() {
+
+  const { getUsers, userProfiles, loading, error } = useAllUsers()
+
+  const onClickFetchUser = () => getUsers()
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={
+        onClickFetchUser
+      }>データ取得</button>
+      <br />
+      {error ? (
+        <p style={{ color: "red" }}>データ取得に失敗しました</p>
+      ) : loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          {userProfiles.map((user) =>(
+            <UserCard key={user.id} user={user}/>
+          ))}
+        </>
+      )}
     </div>
   );
 }
